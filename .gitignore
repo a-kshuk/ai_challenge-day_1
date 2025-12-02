@@ -1,0 +1,32 @@
+# Конфигурационный файл окружения
+.env*
+
+# Каталог установленных пакетов Node.js
+/node_modules
+
+# Журналы и временные файлы
+*.log
+*.tmp
+*.bak
+
+# Локальные файлы настроек
+.vscode/
+
+# Каталог сборки (если используется сборщик, например webpack)
+/build
+/dist
+
+# Кэшированные файлы
+.cache/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Директория хранения coverage (если используются тесты)
+coverage/
+
+# Генерируемые файлы Webpack / Babel
+webpack-stats.json
+.browserslistrc
+next.config.js
+next-env.d.ts
