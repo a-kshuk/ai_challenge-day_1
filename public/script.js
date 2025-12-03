@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const data = await response.json();
       if (data.result) {
-        addBotResponse(data.result);
+        addBotResponse(data.result.data.answer);
       } else {
         showError("Что-то пошло не так.");
       }

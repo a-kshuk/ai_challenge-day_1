@@ -30,3 +30,6 @@ webpack-stats.json
 .browserslistrc
 next.config.js
 next-env.d.ts
+
+# Генерируемые файлы
+.DS_Store

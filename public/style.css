@@ -24,7 +24,6 @@ body {
   flex-direction: column-reverse;
   gap: 10px;
   align-items: stretch;
-  justify-content: flex-end;
   padding: 1em;
   background-color: white;
   border-radius: 8px;
@@ -37,11 +36,10 @@ body {
   color: black;
   padding: 10px;
   border-radius: 10px;
-  min-height: 30px;
   line-height: 1.5;
   position: relative;
   display: inline-block;
-  max-width: 70%;
+  /* max-width: 70%; */
 }
 
 #chatbox div.user-message {
