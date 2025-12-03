@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { GigaChat } from "gigachat";
 import { Agent } from "node:https";
+import { SessionHandler } from "./sessionHandler";
 
 // Загрузка переменных среды
 dotenv.config();
@@ -40,17 +41,24 @@ const gigaChatClient = new GigaChat({
   httpsAgent: httpsAgent,
 });
 
-const SYSTEM_PROMPT = `Ты - AI-ассистент. Твой ответ должен быть ТОЛЬКО валидным JSON.
+let SESSION_ID = "96c8ae06-d121-49e3-8894-795370653207"; // Уникальный идентификатор сессии
 
-Ответ должен соответствовать схеме
+const SYSTEM_PROMPT = `Ты Максим Александрович - Менеджер по продажам автомобилей с пробегом. Твой стаж более 10 лет.
 
-{
-  "status": "success",
-  "data": {
-    "answer": "текст твоего ответа здесь",
-  },
-}
+Твоя задача через диалог собрать всю необходимую информацию.
+
+1. Тип кузова автомобиля
+2. Год выпуска
+3. Марка
+4. Цвет
+5. Бюджет в рублях
+
+Когда ответ получен выведи информацию о доступных автомобилях.
+
+Если пользователь пишет пишет запрос на другую тему - отвечай ему что ты разбираешься только в автомобилях.
 `;
+
+const session = new SessionHandler(gigaChatClient);
 
 // Маршрут для взаимодействия с GigaChat
 app.post("/api/gigachat", async (req, res) => {
@@ -62,17 +70,10 @@ app.post("/api/gigachat", async (req, res) => {
     }
 
     // Отправляем запрос в GigaChat
-    const response = await gigaChatClient.chat({
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: message },
-      ],
-    });
-
-    const result = JSON.parse(response.choices[0].message.content ?? "");
+    const response = await session.sendMessage(message);
 
     // Возвращаем ответ клиенту
-    res.json({ result });
+    res.json({ result: response });
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ error: err.message });
