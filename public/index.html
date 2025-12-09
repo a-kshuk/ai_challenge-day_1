@@ -3,21 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <title>Простой агент GigaChat</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
-      <h1>Продавец поддержанных автомобилей</h1>
-      <div id="chatbox"></div>
+    <div class="container" markdown="1">
+      <h1>Тест температуры</h1>
+      <div id="chatbox" ma></div>
       <form id="chat-form">
-        <input
-          type="text"
-          id="userInput"
-          placeholder="Задайте вопрос..."
-          required
-        />
+        <div>
+          Вопрос:
+          <input
+            type="text"
+            id="userInput"
+            placeholder="Задайте вопрос..."
+            required
+          />
+        </div>
+        <div>
+          Температура: 
+          <input
+            type="number"
+            id="temperatureInput"
+            min="0"
+            max="2"
+            step="0.1"
+            placeholder="Задайте температуру..."
+            required
+            value="0"
+          />
+        </div>
         <button type="submit">Отправить</button>
-      </form>
     </div>
     <script src="script.js"></script>
   </body>

@@ -41,37 +41,19 @@ const gigaChatClient = new GigaChat({
   httpsAgent: httpsAgent,
 });
 
-let SESSION_ID = "96c8ae06-d121-49e3-8894-795370653207"; // Уникальный идентификатор сессии
-
-const SYSTEM_PROMPT = `Ты Максим Александрович - Менеджер по продажам автомобилей с пробегом. Твой стаж более 10 лет.
-
-Твоя задача через диалог собрать всю необходимую информацию.
-
-1. Тип кузова автомобиля
-2. Год выпуска
-3. Марка
-4. Цвет
-5. Бюджет в рублях
-
-Когда ответ получен выведи информацию о доступных автомобилях.
-
-Если пользователь пишет пишет запрос на другую тему - отвечай ему что ты разбираешься только в автомобилях.
-`;
-
 const session = new SessionHandler(gigaChatClient);
 
 // Маршрут для взаимодействия с GigaChat
 app.post("/api/gigachat", async (req, res) => {
   try {
-    const message = req.body.message;
+    const { message, temperature } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: "Сообщение отсутствует" });
     }
 
     // Отправляем запрос в GigaChat
-    const response = await session.sendMessage(message);
-
+    const response = await session.sendMessage(message, temperature);
     // Возвращаем ответ клиенту
     res.json({ result: response });
   } catch (err: any) {

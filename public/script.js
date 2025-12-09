@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatBox = document.querySelector("#chatbox");
   const userInput = document.querySelector("#userInput");
 
+  const temperatureInput = document.querySelector("#temperatureInput");
+  const currentPrompt = document.querySelector("#currentPrompt");
+
   /**
    * Функция отправки сообщения на сервер и отображения его в UI
    */
@@ -9,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const messageText = userInput.value.trim();
     if (!messageText) return;
 
+    const temperature = +temperatureInput.value || 0;
     addUserMessage(messageText);
     userInput.value = "";
 
@@ -18,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: messageText }),
+        body: JSON.stringify({ message: messageText, temperature }),
       });
 
       const data = await response.json();
@@ -46,9 +50,10 @@ document.addEventListener("DOMContentLoaded", function () {
   /**
    * Показываем ответ бота
    */
-  function addBotResponse(text) {
+  function addBotResponse(markdownText) {
+    const text = marked.parse(markdownText);
     const botMsgDiv = document.createElement("div");
-    botMsgDiv.textContent = text;
+    botMsgDiv.innerHTML = text;
     chatBox.insertBefore(botMsgDiv, chatBox.firstChild);
     scrollToBottom();
   }
@@ -68,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Присоединяем обработчик к форме
-  document.querySelector("form").addEventListener("submit", (event) => {
+  document.querySelector("#chat-form").addEventListener("submit", (event) => {
     event.preventDefault();
     sendMessage();
   });
