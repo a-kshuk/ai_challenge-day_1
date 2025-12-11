@@ -1,9 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
+  /**
+   * Получение ссылок на элементы
+   */
   const chatBox = document.querySelector("#chatbox");
   const userInput = document.querySelector("#userInput");
-
   const temperatureInput = document.querySelector("#temperatureInput");
-  const currentPrompt = document.querySelector("#currentPrompt");
+  const progressBar = document.querySelector(".progress-bar");
+  const progressTitle = document.querySelector("#progress-title");
+
+  // Функция обновления статуса progress bar
+  function updateProgress(outgoing = 0, incoming = 0) {
+    const max = outgoing + incoming;
+
+    progressBar.ariaValueMax = max;
+    progressBar.ariaValueNow = outgoing;
+    progressBar.style.width = `${(100 / max) * outgoing}%`;
+
+    progressTitle.textContent = `Исходящие токены: ${outgoing} / Входящие токены: ${incoming}`;
+  }
 
   /**
    * Функция отправки сообщения на сервер и отображения его в UI
@@ -27,7 +41,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const data = await response.json();
       if (data.result) {
-        addBotResponse(data.result);
+        const { message, prompt_tokens, completion_tokens } = data.result;
+        addBotResponse(message);
+        updateProgress(prompt_tokens, completion_tokens);
       } else {
         showError("Что-то пошло не так.");
       }
