@@ -21,6 +21,7 @@
 npm-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+logs/
 
 # Директория хранения coverage (если используются тесты)
 coverage/
