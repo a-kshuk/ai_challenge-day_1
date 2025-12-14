@@ -93,4 +93,27 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     sendMessage();
   });
+
+  (async function () {
+    try {
+      const response = await fetch("http://localhost:3000/api/history", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      if (data.result) {
+        data.result.forEach(({ message, role }) => {
+          role === "user" ? addUserMessage(message) : addBotResponse(message);
+        });
+      } else {
+        showError("Что-то пошло не так.");
+      }
+    } catch (err) {
+      console.log(err.message);
+      showError("Возникла ошибка сети.");
+    }
+  })();
 });
